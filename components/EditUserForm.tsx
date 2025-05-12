@@ -11,7 +11,6 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { fetchUserById, updateUser } from '../utils/api';
-import { useRouter } from 'next/navigation';
 import { User } from '../types/User'; 
 
 interface EditUserFormInputs {
@@ -28,7 +27,6 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<EditUserFormInputs>();
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState('');
-  const router = useRouter();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -56,7 +54,6 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userId }) => {
   const onSubmit: SubmitHandler<EditUserFormInputs> = async (data) => {
     try {
       await updateUser(userId, data);
-      router.push('/users');
     } catch (error) {
         console.error('Error updating user:', error);
       setSubmitError('ユーザーの更新に失敗しました。');

@@ -18,7 +18,7 @@ interface RegisterFormInputs {
 }
 interface RegisterFormProps {
   onSuccess?: () => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
   disabled?: boolean;
 }
 const RegisterForm: React.FC<RegisterFormProps> = ({
