@@ -27,7 +27,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   }
 
   return (
-    <Button color={color} variant={props.variant} {...props}>
+    <Button color={color} variant="contained" {...props}>
       {props.children}
     </Button>
   );
