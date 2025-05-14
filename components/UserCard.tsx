@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 import { User } from "../types/User";
 import Link from "next/link";
-import DeleteUserButton from "./DeleteUserButton";
+import CustomButton from "./parts/CustomButton";
+import { logicDeleteUser } from "@/utils/api";
 
 interface UserCardProps {
   user: User;
@@ -16,6 +17,19 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user, onDelete }) => {
+  const handleDelete = async () => {
+    const confirmed = confirm("本当にこのユーザーを削除しますか？");
+    if (!confirmed) return;
+
+    try {
+      await logicDeleteUser(user.id);
+      onDelete(user.id);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("ユーザーの削除に失敗しました。");
+    }
+  };
+
   return (
     <Card sx={{ minWidth: 275, mb: 2 }}>
       <CardContent>
@@ -29,8 +43,18 @@ const UserCard: React.FC<UserCardProps> = ({ user, onDelete }) => {
         <Button size="small" component={Link} href={`/users/${user.id}/edit`}>
           編集
         </Button>
-        <DeleteUserButton userId={user.id} onDelete={onDelete} />
-        <Button size="small" component={Link} href={`/users/${user.id}/details`}>
+        <CustomButton
+          variantType="danger"
+          size="small"
+          onClick={handleDelete}
+        >
+          削除
+        </CustomButton>
+        <Button
+          size="small"
+          component={Link}
+          href={`/users/${user.id}/details`}
+        >
           詳細
         </Button>
       </CardActions>
