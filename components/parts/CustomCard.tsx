@@ -20,7 +20,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
         <Typography variant="h5" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" whiteSpace={"pre-line"} >
           {description}
         </Typography>
       </CardContent>
