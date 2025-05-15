@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Box, Typography, Button } from "@mui/material";
+import { Modal, Box, Typography, Button, Backdrop } from "@mui/material";
 
 const style = {
   position: "absolute" as const,
@@ -29,7 +29,21 @@ const CustomModal: React.FC<CustomModalProps> = ({
   onConfirm,
 }) => {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 300,
+          sx: {
+            backdropFilter: "blur(5px)",
+            backgroundColor: "rgba(0,0,0,0,4)",
+          },
+        },
+      }}
+    >
       <Box sx={style}>
         <Typography variant="h6" component="h2" gutterBottom>
           {title}
