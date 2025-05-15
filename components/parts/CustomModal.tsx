@@ -1,17 +1,5 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Modal, Box, Typography, Button, Backdrop } from "@mui/material";
-
-const style = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  borderRadius: "8px",
-  boxShadow: 24,
-  p: 4,
-};
 
 interface CustomModalProps {
   open: boolean;
@@ -28,6 +16,40 @@ const CustomModal: React.FC<CustomModalProps> = ({
   onClose,
   onConfirm,
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({ x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 100 });
+  const offset = useRef({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    offset.current = {
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    };
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      setPosition({
+        x: e.clientX - offset.current.x,
+        y: e.clientY - offset.current.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
   return (
     <Modal
       open={open}
@@ -39,12 +61,26 @@ const CustomModal: React.FC<CustomModalProps> = ({
           timeout: 300,
           sx: {
             backdropFilter: "blur(5px)",
-            backgroundColor: "rgba(0,0,0,0,4)",
+            backgroundColor: "rgba(0,0,0,0.4)",
           },
         },
       }}
     >
-      <Box sx={style}>
+      <Box
+        sx={{
+          position: "absolute",
+          left: position.x,
+          top: position.y,
+          width: 400,
+          bgcolor: "background.paper",
+          borderRadius: "8px",
+          boxShadow: 24,
+          p: 4,
+          cursor: isDragging ? "grabbing" : "grab",
+          userSelect: "none",
+        }}
+        onMouseDown={handleMouseDown}
+      >
         <Typography variant="h6" component="h2" gutterBottom>
           {title}
         </Typography>

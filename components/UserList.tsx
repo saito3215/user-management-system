@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Link } from "@mui/material";
+import { Link } from "@mui/material";
 import { User } from "../types/User";
 import CustomCard from "./parts/CustomCard";
 import CustomButton from "./parts/CustomButton";
@@ -39,15 +39,15 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           description={`役割: ${user.role}\n${user.email}`}
           actions={
             <>
-              <Button component={Link} href={`/users/${user.id}/edit`}>
+              <CustomButton  href={`/users/${user.id}/edit`}>
                 編集
-              </Button>
+              </CustomButton>
               <CustomButton onClick={() => {setOpen(true); setSelectedUserId(user.id)}} variantType="danger">
                 削除
               </CustomButton>
-              <Button component={Link} href={`/users/${user.id}/details`}>
+              <CustomButton  href={`/users/${user.id}/details`}>
                 詳細
-              </Button>
+              </CustomButton>
             </>
           }
           />

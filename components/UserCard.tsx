@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-} from "@mui/material";
+import { Card, CardContent, Typography, CardActions } from "@mui/material";
 import { User } from "../types/User";
-import Link from "next/link";
 import CustomButton from "./parts/CustomButton";
 import { logicDeleteUser } from "@/utils/api";
 
@@ -15,7 +8,6 @@ interface UserCardProps {
   user: User;
   onDelete: (userId: number) => void;
 }
-
 const UserCard: React.FC<UserCardProps> = ({ user, onDelete }) => {
   const handleDelete = async () => {
     const confirmed = confirm("本当にこのユーザーを削除しますか？");
@@ -40,23 +32,23 @@ const UserCard: React.FC<UserCardProps> = ({ user, onDelete }) => {
         <Typography variant="body2">役割: {user.role}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" component={Link} href={`/users/${user.id}/edit`}>
-          編集
-        </Button>
         <CustomButton
-          variantType="danger"
+          variantType="primary"
           size="small"
-          onClick={handleDelete}
+          href={`/users/${user.id}/edit`}
         >
+          編集
+        </CustomButton>
+        <CustomButton variantType="danger" size="small" onClick={handleDelete}>
           削除
         </CustomButton>
-        <Button
+        <CustomButton
+          variantType="secondary"
           size="small"
-          component={Link}
           href={`/users/${user.id}/details`}
         >
           詳細
-        </Button>
+        </CustomButton>
       </CardActions>
     </Card>
   );
