@@ -12,15 +12,19 @@ interface CustomCardProps {
   title: string;
   description: string;
   actions?: React.ReactNode;
-  color?: string;
+  color?: "primary" | "secondary"; // 2色
   progress?: number;
 }
+const colorMap = {
+  primary: "#e3f2fd",   // 薄い青
+  secondary: "#f5f5f5", // 薄いグレー
+};
 
 const CustomCard: React.FC<CustomCardProps> = ({
   title,
   description,
   actions,
-  color = "white",
+  color = "secondary", //グレーデフォルト
   progress,
 }) => {
   const [flipped, setFlipped] = useState(false);
@@ -28,6 +32,8 @@ const CustomCard: React.FC<CustomCardProps> = ({
   const handleFlip = () => {
     setFlipped((prev) => !prev);
   };
+
+  const backgroundColor = colorMap[color];
 
   return (
     <Box
@@ -47,10 +53,10 @@ const CustomCard: React.FC<CustomCardProps> = ({
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-      
+        {/* Front */}
         <Card
           sx={{
-            backgroundColor: color,
+            backgroundColor,
             width: "100%",
             height: "100%",
             position: "absolute",
@@ -69,7 +75,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
         {/* Back */}
         <Card
           sx={{
-            backgroundColor: color,
+            backgroundColor,
             width: "100%",
             height: "100%",
             position: "absolute",
@@ -78,7 +84,11 @@ const CustomCard: React.FC<CustomCardProps> = ({
           }}
         >
           <CardContent>
-            <Typography variant="body2" color="text.secondary" whiteSpace="pre-line">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: "pre-line" }}
+            >
               {description}
             </Typography>
           </CardContent>

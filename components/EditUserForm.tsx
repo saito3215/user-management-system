@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { fetchUserById, updateUser } from "../utils/api";
 import { User } from "../types/User";
+import CustomModal from "./parts/CustomModal";
 
 interface EditUserFormInputs {
   name: string;
@@ -36,10 +37,12 @@ const EditUserForm: React.FC<EditUserFormProps> = ({
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<EditUserFormInputs>();
   const [loading, setLoading] = useState(true);
   const [submitError, setSubmitError] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -64,19 +67,21 @@ const EditUserForm: React.FC<EditUserFormProps> = ({
     loadUser();
   }, [userId, setValue]);
 
-  const onSubmit: SubmitHandler<EditUserFormInputs> = async (data) => {
+  const handleConfirmSubmit = async () => {
     try {
-      await updateUser(userId, data);
-      if (onSuccess) {
-        onSuccess();
-      }
+      const values = getValues(); 
+      await updateUser(userId, values);
+      setModalOpen(false);
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error updating user:", error);
       setSubmitError("ユーザーの更新に失敗しました。");
-      if (onError) {
-        onError(error);
-      }
+      if (onError) onError(error);
     }
+  };
+
+  const onSubmit: SubmitHandler<EditUserFormInputs> = () => {
+    setModalOpen(true); 
   };
 
   if (loading) {
@@ -117,11 +122,10 @@ const EditUserForm: React.FC<EditUserFormProps> = ({
           label="ロール"
           fullWidth
           margin="normal"
-          type="text"
           {...register("role", { required: "役職は必須です" })}
           error={!!errors.role}
           helperText={errors.role?.message}
-        ></TextField>
+        />
 
         {submitError && <Alert severity="error">{submitError}</Alert>}
 
@@ -131,10 +135,19 @@ const EditUserForm: React.FC<EditUserFormProps> = ({
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
+          disabled={disabled}
         >
           更新
         </Button>
       </form>
+
+      <CustomModal
+        open={modalOpen}
+        title="確認"
+        content="この内容で更新してよろしいですか？"
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleConfirmSubmit}
+      />
     </Box>
   );
 };

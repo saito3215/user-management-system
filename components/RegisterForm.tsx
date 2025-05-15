@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   TextField,
-  Button,
   Box,
   Typography,
   Alert,
 } from "@mui/material";
 import { createUser } from "../utils/api";
+import CustomButton from "./parts/CustomButton";
 
 interface RegisterFormInputs {
   name: string;
@@ -85,7 +85,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
         {submitError && <Alert severity="error">{submitError}</Alert>}
 
-        <Button
+        <CustomButton
           type="submit"
           variant="contained"
           color="primary"
@@ -94,7 +94,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           disabled={disabled}
         >
           登録
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Link } from "@mui/material";
 import { User } from "../types/User";
 import CustomCard from "./parts/CustomCard";
 import CustomButton from "./parts/CustomButton";
@@ -14,11 +13,10 @@ interface UserListProps {
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
   const [visibleUsers, setVisibleUsers] = useState(users);
-      const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number>();
 
   const handleDelete = async (userId: number) => {
-
     try {
       await logicDeleteUser(userId);
       setVisibleUsers((prevUsers) =>
@@ -37,31 +35,44 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           key={user.id}
           title={user.name}
           description={`役割: ${user.role}\n${user.email}`}
+          color={user.id % 2 === 0 ? "primary" : "secondary"}
           actions={
             <>
-              <CustomButton  href={`/users/${user.id}/edit`}>
+              <CustomButton
+                href={`/users/${user.id}/edit`}
+                variantType="primary"
+              >
                 編集
               </CustomButton>
-              <CustomButton onClick={() => {setOpen(true); setSelectedUserId(user.id)}} variantType="danger">
+              <CustomButton
+                onClick={() => {
+                  setOpen(true);
+                  setSelectedUserId(user.id);
+                }}
+                variantType="danger"
+              >
                 削除
               </CustomButton>
-              <CustomButton  href={`/users/${user.id}/details`}>
+              <CustomButton
+                href={`/users/${user.id}/details`}
+                variantType="secondary"
+              >
                 詳細
               </CustomButton>
             </>
           }
-          />
-        ))}
-        <CustomModal
-          open={open}
-          title="確認"
-          content="本当にこの操作を実行しますか？"
-          onClose={() => setOpen(false)}
-          onConfirm={() => {
-            handleDelete(selectedUserId);
-            setOpen(false);
-          }}
         />
+      ))}
+      <CustomModal
+        open={open}
+        title="確認"
+        content="本当にこの操作を実行しますか？"
+        onClose={() => setOpen(false)}
+        onConfirm={() => {
+          handleDelete(selectedUserId);
+          setOpen(false);
+        }}
+      />
     </div>
   );
 };
