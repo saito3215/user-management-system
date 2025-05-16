@@ -40,14 +40,16 @@ const CustomCard: React.FC<CustomCardProps> = ({
       onClick={handleFlip}
       sx={{
         position: "relative",
-        width: 900,
-        height: 200,
+        width: 950,
+        height: 190,
       }}
     >
       <Box
         sx={{
+          backgroundColor,
           width: "100%",
           height: "100%",
+          border: "1px solid #ccc",
           transformStyle: "preserve-3d",
           transition: "transform 0.6s",
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
